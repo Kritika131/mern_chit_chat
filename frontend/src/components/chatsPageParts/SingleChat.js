@@ -17,6 +17,7 @@ import ProfileModal from "./ProfileModal";
 import { ChatState } from "../../context/ChatProvider";
 import { getSender, getSenderFull } from "../../config/ChatLogics";
 import UpdateGroupChatModal from "./UpdateGroupChatModal";
+import ScrollableChat from "../ScrollableChat";
 
 // const ENDPOINT = "http://localhost:5005"; // "https://talk-a-tive.herokuapp.com"; -> After deployment
 // var socket, selectedChatCompare;
@@ -41,71 +42,78 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { selectedChat, setSelectedChat, user } =
     ChatState();
 
-  // const fetchMessages = async () => {
-  //   if (!selectedChat) return;
+  const fetchMessages = async () => {
+    if (!selectedChat) return;
 
-  //   try {
-  //     const config = {
-  //       headers: {
-  //         Authorization: `Bearer ${user.token}`,
-  //       },
-  //     };
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
 
-  //     setLoading(true);
+      console.log("selectedChat--:::::::--",selectedChat)
 
-  //     const { data } = await axios.get(
-  //       `/api/message/${selectedChat._id}`,
-  //       config
-  //     );
-  //     setMessages(data);
-  //     setLoading(false);
+      setLoading(true);
 
-  //     socket.emit("join chat", selectedChat._id);
-  //   } catch (error) {
-  //     toast({
-  //       title: "Error Occured!",
-  //       description: "Failed to Load the Messages",
-  //       status: "error",
-  //       duration: 5000,
-  //       isClosable: true,
-  //       position: "bottom",
-  //     });
-  //   }
-  // };
+      const { data } = await axios.get(
+        `/api/message/${selectedChat._id}`,
+        config
+      );
 
-  // const sendMessage = async (event) => {
-  //   if (event.key === "Enter" && newMessage) {
-  //     socket.emit("stop typing", selectedChat._id);
-  //     try {
-  //       const config = {
-  //         headers: {
-  //           "Content-type": "application/json",
-  //           Authorization: `Bearer ${user.token}`,
-  //         },
-  //       };
-  //       setNewMessage("");
-  //       const { data } = await axios.post(
-  //         "/api/message",
-  //         {
-  //           content: newMessage,
-  //           chatId: selectedChat,
-  //         },
-  //         config
-  //       );
-  //       socket.emit("new message", data);
-  //       setMessages([...messages, data]);
-  //     } catch (error) {
-  //       toast({
-  //         title: "Error Occured!",
-  //         description: "Failed to send the Message",
-  //         status: "error",
-  //         duration: 5000,
-  //         isClosable: true,
-  //         position: "bottom",
-  //       });
-  //     }
-  //   }
-  // };
+      console.log("selected chat response---:---",data)
+      setMessages(data);
+      setLoading(false);
+
+      // socket.emit("join chat", selectedChat._id);
+    } catch (error) {
+      toast({
+        title: "Error Ocurred!",
+        description: "Failed to Load the Messages",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+    }
+  };
+
+  const sendMessage = async (event) => {
+    if (event.key === "Enter" && newMessage) {
+      // socket.emit("stop typing", selectedChat._id);
+      try {
+        const config = {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        };
+        setNewMessage("");
+        console.log("newMessage------",newMessage)
+        console.log("selectedChat id------",selectedChat)
+        const { data } = await axios.post(
+          "/api/message",
+          {
+            content: newMessage,
+            chatId: selectedChat,
+          },
+          config
+        );
+        console.log("data`---------",data);
+        // socket.emit("new message", data);
+        setMessages([...messages, data]);
+      } catch (error) {
+        toast({
+          title: "Error Occured!",
+          description: "Failed to send the Message",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+      }
+    }
+  };
 
   // useEffect(() => {
   //   socket = io(ENDPOINT);
@@ -117,12 +125,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   //   // eslint-disable-next-line
   // }, []);
 
-  // useEffect(() => {
-  //   fetchMessages();
+  useEffect(() => {
+    fetchMessages();
 
-  //   selectedChatCompare = selectedChat;
-  //   // eslint-disable-next-line
-  // }, [selectedChat]);
+    // selectedChatCompare = selectedChat;
+    // eslint-disable-next-line
+  }, [selectedChat]);
 
   // useEffect(() => {
   //   socket.on("message recieved", (newMessageRecieved) => {
@@ -140,26 +148,26 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   //   });
   // });
 
-  // const typingHandler = (e) => {
-  //   setNewMessage(e.target.value);
+  const typingHandler = (e) => {
+    setNewMessage(e.target.value);
 
-  //   if (!socketConnected) return;
+    // if (!socketConnected) return;
 
-  //   if (!typing) {
-  //     setTyping(true);
-  //     socket.emit("typing", selectedChat._id);
-  //   }
-  //   let lastTypingTime = new Date().getTime();
-  //   var timerLength = 3000;
-  //   setTimeout(() => {
-  //     var timeNow = new Date().getTime();
-  //     var timeDiff = timeNow - lastTypingTime;
-  //     if (timeDiff >= timerLength && typing) {
-  //       socket.emit("stop typing", selectedChat._id);
-  //       setTyping(false);
-  //     }
-  //   }, timerLength);
-  // };
+    // if (!typing) {
+    //   setTyping(true);
+    //   socket.emit("typing", selectedChat._id);
+    // }
+    // let lastTypingTime = new Date().getTime();
+    // var timerLength = 3000;
+    // setTimeout(() => {
+    //   var timeNow = new Date().getTime();
+    //   var timeDiff = timeNow - lastTypingTime;
+    //   if (timeDiff >= timerLength && typing) {
+    //     socket.emit("stop typing", selectedChat._id);
+    //     setTyping(false);
+    //   }
+    // }, timerLength);
+  };
 
   return (
     <>
@@ -190,7 +198,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 </>
               ) : (
                 <>
-                  {selectedChat.chatName.toUpperCase()}
+                  {selectedChat.chatName.toUpperCase()} 
+
                   <UpdateGroupChatModal
                     // fetchMessages={fetchMessages}
                     fetchAgain={fetchAgain}
@@ -199,7 +208,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 </>
               ))}
           </Text>
-          {/* <Box
+          <Box
             display="flex"
             flexDir="column"
             justifyContent="flex-end"
@@ -230,7 +239,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               isRequired
               mt={3}
             >
-              {istyping ? (
+              {/* {istyping ? (
                 <div>
                   <Lottie
                     options={defaultOptions}
@@ -241,7 +250,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 </div>
               ) : (
                 <></>
-              )}
+              )} */}
               <Input
                 variant="filled"
                 bg="#E0E0E0"
@@ -250,7 +259,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 onChange={typingHandler}
               />
             </FormControl>
-          </Box> */}
+
+          </Box>
         </>
       ) : (
         // to get socket.io on same page

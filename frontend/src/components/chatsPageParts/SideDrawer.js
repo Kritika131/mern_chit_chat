@@ -73,6 +73,8 @@ const SideDrawer = () => {
 
       const { data } = await axios.get(`/api/user?search=${search}`, config);
 
+      console.log("data------",data)
+
       setLoading(false);
       setSearchResult(data);
     } catch (error) {
@@ -99,8 +101,11 @@ const SideDrawer = () => {
         },
       };
       const { data } = await axios.post(`/api/chat`, { userId }, config);
-      console.log("data--",data);
-      if (!chats?.find((c) => c._id === data._id)) setChats([data, ...chats]);
+      console.log("data to access chat --",data);
+      console.log("data to access chats chat --",chats);
+      if(!chats) setChats([data])
+      if (!((chats && chats)?.find((c) => c._id === data._id))) setChats([data, ...chats]);
+   
       setSelectedChat(data);
       setLoadingChat(false);
       onClose();
