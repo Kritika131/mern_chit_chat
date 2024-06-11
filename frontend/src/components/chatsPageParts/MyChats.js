@@ -109,12 +109,12 @@ const MyChats = ({ fetchAgain }) => {
                     ? getSender(loggedUser, chat.users)
                     : chat.chatName}
                 </Text>
-                {/* {chat.latestMessage && (
+                {/* {chat.lastestMessage && (
                   <Text fontSize="xs">
-                    <b>{chat.latestMessage.sender.name} : </b>
-                    {chat.latestMessage.content.length > 50
-                      ? chat.latestMessage.content.substring(0, 51) + "..."
-                      : chat.latestMessage.content}
+                    <b>{chat.lastestMessage.sender.name} : </b>
+                    {chat.lastestMessage.content.length > 50
+                      ? chat.lastestMessage.content.substring(0, 51) + "..."
+                      : chat.lastestMessage.content}
                   </Text>
                 )} */}
               </Box>

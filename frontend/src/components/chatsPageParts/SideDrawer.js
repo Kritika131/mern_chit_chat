@@ -22,6 +22,8 @@ import { Tooltip } from "@chakra-ui/tooltip";
 import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { Avatar } from "@chakra-ui/avatar";
 // import { useNavigate } from "react-router-dom";
+import {Effect} from "react-notification-badge"
+import NotificationBadge from "react-notification-badge"
 
 import axios from "axios";
 import { useToast } from "@chakra-ui/toast";
@@ -31,6 +33,7 @@ import { ChatState } from '../../context/ChatProvider';
 import ProfileModal from './ProfileModal';
 import UserListItem from '../UserAvatar/UserListItem';
 import { useHistory } from 'react-router-dom';
+import { getSender } from '../../config/ChatLogics';
 
 const SideDrawer = () => {
     const [search, setSearch] = useState("");
@@ -39,7 +42,7 @@ const SideDrawer = () => {
   const [loadingChat, setLoadingChat] = useState(false);
 
   const {user,chats,
-    setChats,setSelectedChat} = ChatState()
+    setChats,setSelectedChat,notification,setNotification} = ChatState()
 
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -148,14 +151,14 @@ const SideDrawer = () => {
         <div>
           <Menu>
             <MenuButton p={1}>
-              {/* <NotificationBadge
+              <NotificationBadge
                 count={notification.length}
                 effect={Effect.SCALE}
-              /> */}
+              />
               <BellIcon fontSize="2xl" m={1} />
             </MenuButton>
             <MenuList pl={2}>
-              {/* {!notification.length && "No New Messages"}
+              {!notification.length && "No New Messages"}
               {notification.map((notif) => (
                 <MenuItem
                   key={notif._id}
@@ -168,7 +171,7 @@ const SideDrawer = () => {
                     ? `New Message in ${notif.chat.chatName}`
                     : `New Message from ${getSender(user, notif.chat.users)}`}
                 </MenuItem>
-              ))} */}
+              ))}
             </MenuList>
           </Menu>
           <Menu>
