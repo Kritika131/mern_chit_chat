@@ -2,6 +2,7 @@ import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, V
 import React, { useState } from 'react'
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import { ChatState } from '../../context/ChatProvider';
 
 
 
@@ -10,6 +11,7 @@ const SignUp = () => {
   const handleClick = () => setShow(!show);
   const toast = useToast();
   const history = useHistory();
+  const {setUser} = ChatState()
 ;
 
   const [name, setName] = useState();
@@ -108,12 +110,16 @@ const SignUp = () => {
         isClosable: true,
         position: "bottom",
       });
+      
       localStorage.setItem("userInfo", JSON.stringify(data));
+      setUser(data);
       setPicLoading(false);
       history.push("/chats");
     } catch (error) {
+
+      // console.log("error--signup-----",error);
       toast({
-        title: "Error Occured!",
+        title: "Error Occurred!",
         description: error.response.data.message,
         status: "error",
         duration: 5000,

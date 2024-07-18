@@ -29,6 +29,7 @@ const GroupChatModal = ({ children }) => {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
+ 
   const toast = useToast();
 
   const { user, chats, setChats } = ChatState();
@@ -78,6 +79,7 @@ const GroupChatModal = ({ children }) => {
   };
 
   const handleDelete = (delUser) => {
+    console.log("DelUser------------",delUser)
     setSelectedUsers(selectedUsers.filter((sel) => sel._id !== delUser._id));
   };
 
@@ -107,7 +109,9 @@ const GroupChatModal = ({ children }) => {
         },
         config
       );
+      console.log("data-from api/chat/group--",data)
       setChats([data, ...chats]);
+      console.log("chats--",chats)
       onClose();
       toast({
         title: "New Group Chat Created!",

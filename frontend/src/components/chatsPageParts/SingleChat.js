@@ -51,7 +51,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         },
       };
 
-      console.log("selectedChat--:::::::--",selectedChat)
+      // console.log("selectedChat--:::::::--",selectedChat)
 
       setLoading(true);
 
@@ -60,7 +60,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         config
       );
 
-      console.log("selected chat response---:---",data)
+      // console.log("selected chat response---:---",data)
       setMessages(data);
       setLoading(false);
 
@@ -88,8 +88,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           },
         };
         setNewMessage("");
-        console.log("newMessage------",newMessage)
-        console.log("selectedChat id------",selectedChat)
+        // console.log("newMessage------",newMessage)
+        // console.log("selectedChat id------",selectedChat)
         const { data } = await axios.post(
           "/api/message",
           {
@@ -148,7 +148,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     });
   });
 
-  console.log('notification----',notification)
+  // console.log('notification----',notification)
 
   const typingHandler = (e) => {
     setNewMessage(e.target.value);

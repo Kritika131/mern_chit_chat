@@ -3,8 +3,7 @@ import { Box, Stack, Text } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
 import { useEffect, useState } from "react";
-// import { getSender } from "../config/ChatLogics";
-// import ChatLoading from "./ChatLoading";
+
 import { Button } from "@chakra-ui/react";
 
 import { getSender } from "../../config/ChatLogics";
@@ -16,10 +15,12 @@ const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
 
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
+  // console.log("user--1------",user)
 
   const toast = useToast();
 
   const fetchChats = async () => {
+
     // console.log(user._id);
     try {
       const config = {
@@ -27,19 +28,35 @@ const MyChats = ({ fetchAgain }) => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-
-      const { data } = await axios.get("/api/chat", config);
-      console.log("chat Data::::::---",data);
+    //  console.log("config34---",config)
+      const {data} = await axios.get("/api/chat", config);
+     
+    
+      // console.log("chat Data::::::---",data);
       setChats(data);
     } catch (error) {
+      // console.log("error--23545----",error.response)
+      if(error.response.status===401){
+        localStorage.removeItem("userInfo");
+        window.location.reload();
+        toast({
+        title: "Error Occurred!",
+        description: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+      } else{
       toast({
-        title: "Error Occured!",
+        title: "Error Occurred!",
         description: "Failed to Load the chats",
         status: "error",
         duration: 5000,
         isClosable: true,
         position: "bottom-left",
       });
+    }
     }
   };
 

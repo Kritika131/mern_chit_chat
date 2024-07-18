@@ -7,16 +7,18 @@ import { useState } from "react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
+import { ChatState } from '../../context/ChatProvider';
 // import { ChatState } from "../../Context/ChatProvider";
 
 const Login = () => {
     const [show, setShow] = useState(false);
+    const {setUser} = ChatState()
   const handleClick = () => setShow(!show);
   const toast = useToast();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [loading, setLoading] = useState(false);
-  const [user,setUser] = useState()
+  // const [user,setUser] = useState()
 
   const history = useHistory()
 
@@ -59,9 +61,10 @@ const Login = () => {
       setLoading(false);
       history.push("/chats");
     } catch (error) {
+      console.log("login error--------",error);
       toast({
-        title: "Error Occured!",
-        description: error.response.data.message,
+        title: "Error Occurred!",
+        description: error.response.data.msg,
         status: "error",
         duration: 5000,
         isClosable: true,

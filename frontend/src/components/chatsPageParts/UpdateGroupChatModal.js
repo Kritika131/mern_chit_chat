@@ -236,7 +236,7 @@ const handleRemove = async (user1) => {
       config
     );
 
-    console.log("Response from server:", data); // Log response
+    // console.log("Response from server:::::::", data); // Log response
 
     if (data) {
       user1._id === user._id ? setSelectedChat() : setSelectedChat(data);
