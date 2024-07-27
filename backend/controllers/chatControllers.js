@@ -79,8 +79,12 @@ const fetchChats = asyncHandler(async (req, res) => {
 //@route           POST /api/chat/group
 //@access          Protected
 const createGroupChat = asyncHandler(async (req, res) => {
+
+  
+//  console.log("admin user---",req.user);
+//  console.log("adminData---",adminData);
   if (!req.body.users || !req.body.name) {
-    return res.status(400).send({ message: "Please Fill all the feilds" });
+    return res.status(400).send({ message: "Please Fill all the fields" });
   }
 
   var users = JSON.parse(req.body.users);
@@ -91,14 +95,14 @@ const createGroupChat = asyncHandler(async (req, res) => {
       .send("More than 2 users are required to form a group chat");
   }
 
+ 
   users.push(req.user);
-
   try {
     const groupChat = await Chat.create({
       chatName: req.body.name,
       users: users,
       isGroupChat: true,
-      groupAdmin: req.user,
+      groupAdmin:req.user,
     });
 
     const fullGroupChat = await Chat.findOne({ _id: groupChat._id })
@@ -142,13 +146,15 @@ const renameGroup = asyncHandler(async (req, res) => {
 // @route   PUT /api/chat/groupremove
 // @access  Protected
 const removeFromGroup = asyncHandler(async (req, res) => {
-  const { chatId, userId } = req.body;
+  const { chatId, userId ,isAdmin} = req.body;
+  console.log("isAdmin::::",isAdmin);
 
   // check if the requester is admin
 
   const removed = await Chat.findByIdAndUpdate(
     chatId,
     {
+      isGroupChat:!isAdmin,
       $pull: { users: userId },
     },
     {

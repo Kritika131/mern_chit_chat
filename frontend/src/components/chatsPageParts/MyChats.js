@@ -15,27 +15,26 @@ const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
 
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
-  // console.log("user--1------",user)
-
+  
   const toast = useToast();
 
   const fetchChats = async () => {
 
-    // console.log(user._id);
+  
     try {
       const config = {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
       };
-    //  console.log("config34---",config)
+   
       const {data} = await axios.get("/api/chat", config);
      
     
-      // console.log("chat Data::::::---",data);
+     
       setChats(data);
     } catch (error) {
-      // console.log("error--23545----",error.response)
+    
       if(error.response.status===401){
         localStorage.removeItem("userInfo");
         window.location.reload();

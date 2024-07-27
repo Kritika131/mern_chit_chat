@@ -46,7 +46,7 @@ const SignUp = () => {
       body: formData,
     });
     const data = await response.json();
-    console.log("data---------",data);
+ 
     setImageUrl(data.secure_url);
      setPicLoading(false);
   }else{
@@ -117,7 +117,7 @@ const SignUp = () => {
       history.push("/chats");
     } catch (error) {
 
-      // console.log("error--signup-----",error);
+      console.log("error--signup-----",error);
       toast({
         title: "Error Occurred!",
         description: error.response.data.message,

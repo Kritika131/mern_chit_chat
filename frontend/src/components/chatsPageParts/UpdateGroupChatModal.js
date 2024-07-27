@@ -32,6 +32,8 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
   const [renameloading, setRenameLoading] = useState(false);
   const toast = useToast();
 
+ 
+
   const { selectedChat, setSelectedChat, user } = ChatState();
 
   const handleSearch = async (query) => {
@@ -48,7 +50,7 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
         },
       };
       const { data } = await axios.get(`/api/user?search=${search}`, config);
-      console.log(data);
+    
       setLoading(false);
       setSearchResult(data);
     } catch (error) {
@@ -83,7 +85,7 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
         config
       );
 
-      console.log("rename------",data._id);
+ 
       // setSelectedChat("");
       setSelectedChat(data);
       setFetchAgain(!fetchAgain);
@@ -144,6 +146,16 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
       setSelectedChat(data);
       setFetchAgain(!fetchAgain);
       setLoading(false);
+      setSearchResult([])
+      setSearch("")
+      
+       toast({
+        title: "User Added in group!",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
     } catch (error) {
       toast({
         title: "Error Occurred!",
@@ -232,6 +244,8 @@ const handleRemove = async (user1) => {
       {
         chatId: selectedChat._id,
         userId: user1._id,
+        isAdmin : selectedChat.groupAdmin._id === user1._id ? true : false
+
       },
       config
     );
@@ -247,6 +261,8 @@ const handleRemove = async (user1) => {
       console.log("Response data is undefined or empty."); // Log if data is undefined
     }
   } catch (error) {
+
+    console.log("error---34--",error)
     toast({
       title: "Error Occurred!",
       description: error.response ? error.response.data.message : "Unknown error",
@@ -259,6 +275,7 @@ const handleRemove = async (user1) => {
   }
   setGroupChatName("");
 };
+
   return (
     <>
       <IconButton display={{ base: "flex" }} icon={<ViewIcon />} onClick={onOpen} />
@@ -282,7 +299,7 @@ const handleRemove = async (user1) => {
                 <UserBadgeItem
                   key={u._id}
                   user={u}
-                  admin={selectedChat.groupAdmin}
+                  admin={selectedChat.groupAdmin }
                   handleFunction={() => handleRemove(u)}
                 />
               ))}
@@ -308,6 +325,7 @@ const handleRemove = async (user1) => {
               <Input
                 placeholder="Add User to group"
                 mb={1}
+                value={search}
                 onChange={(e) => handleSearch(e.target.value)}
               />
             </FormControl>

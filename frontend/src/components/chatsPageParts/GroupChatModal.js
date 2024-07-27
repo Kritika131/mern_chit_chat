@@ -14,7 +14,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import UserBadgeItem from "../userAvatar/UserBadgeItem";
 import { ChatState } from "../../context/ChatProvider";
 import UserListItem from "../UserAvatar/UserListItem";
@@ -29,6 +29,12 @@ const GroupChatModal = ({ children }) => {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
+
+
+  useEffect(()=>{
+    setSelectedUsers([])
+
+  },[children])
  
   const toast = useToast();
 
@@ -47,6 +53,16 @@ const GroupChatModal = ({ children }) => {
     }
 
     setSelectedUsers([...selectedUsers, userToAdd]);
+    setSearchResult([]);
+    setSearch("")
+     toast({
+        title: "User Added in group!",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+
   };
 
   const handleSearch = async (query) => {
@@ -63,7 +79,7 @@ const GroupChatModal = ({ children }) => {
         },
       };
       const { data } = await axios.get(`/api/user?search=${search}`, config);
-      console.log("-------->",data);
+    
       setLoading(false);
       setSearchResult(data);
     } catch (error) {
@@ -78,15 +94,17 @@ const GroupChatModal = ({ children }) => {
     }
   };
 
+ 
+  
   const handleDelete = (delUser) => {
-    console.log("DelUser------------",delUser)
+  
     setSelectedUsers(selectedUsers.filter((sel) => sel._id !== delUser._id));
   };
 
   const handleSubmit = async () => {
     if (!groupChatName || !selectedUsers) {
       toast({
-        title: "Please fill all the feilds",
+        title: "Please fill all the fields",
         status: "warning",
         duration: 5000,
         isClosable: true,
@@ -105,13 +123,14 @@ const GroupChatModal = ({ children }) => {
         `/api/chat/group`,
         {
           name: groupChatName,
-          users: JSON.stringify(selectedUsers.map((u) => u._id)),
+          users: JSON.stringify(selectedUsers?.map((u) => u._id)),
         },
         config
       );
-      console.log("data-from api/chat/group--",data)
+   
       setChats([data, ...chats]);
-      console.log("chats--",chats)
+     
+      setSearchResult([])
       onClose();
       toast({
         title: "New Group Chat Created!",
@@ -121,6 +140,7 @@ const GroupChatModal = ({ children }) => {
         position: "bottom",
       });
     } catch (error) {
+     
       toast({
         title: "Failed to Create the Chat!",
         description: error.response.data,
@@ -160,6 +180,7 @@ const GroupChatModal = ({ children }) => {
               <Input
                 placeholder="Add Users eg: Qwerty, Abc, Jane"
                 mb={1}
+                value={search}
                 onChange={(e) => handleSearch(e.target.value)}
               />
             </FormControl>

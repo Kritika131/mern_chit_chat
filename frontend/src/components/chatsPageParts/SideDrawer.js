@@ -76,7 +76,7 @@ const SideDrawer = () => {
 
       const { data } = await axios.get(`/api/user?search=${search}`, config);
 
-      console.log("data------",data)
+
 
       setLoading(false);
       setSearchResult(data);
@@ -93,7 +93,7 @@ const SideDrawer = () => {
   };
 
   const accessChat = async (userId) => {
-    // console.log(userId);
+   
 
     try {
       setLoadingChat(true);
@@ -104,8 +104,7 @@ const SideDrawer = () => {
         },
       };
       const { data } = await axios.post(`/api/chat`, { userId }, config);
-      console.log("data to access chat --",data);
-      console.log("data to access chats chat --",chats);
+
       if(!chats) setChats([data])
       if (!((chats && chats)?.find((c) => c._id === data._id))) setChats([data, ...chats]);
    
