@@ -6,6 +6,7 @@ import ChatPage from  "./pages/ChatPage";
 // import { BrowserRouter } from "react-router-dom/cjs/react-router-dom";
 // BrowserRouter
 import { Route,Switch } from "react-router-dom";
+import TestingUI from "./pages/TestUI";
 // import {
 //   createBrowserRouter,
 //   RouterProvider,
@@ -33,6 +34,7 @@ function App() {
        <Switch>
         <Route path="/chats" component={ChatPage} />
         <Route path="/" component={HomePage} exact />
+        <Route path="/test" component={TestingUI} exact />
       </Switch>
 
     

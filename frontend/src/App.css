@@ -4,10 +4,10 @@
   min-height: 100vh;
   display: flex;
   background-image: url("https://img.freepik.com/premium-photo/idea-comment-think-reactions-emoji-3d-render-social-media-balloon-symbol-with-comment-icons-pattern-background_41204-22608.jpg?size=626&ext=jpg");
-  /* background-image: url("https://img.freepik.com/free-vector/speech-bubble-concept-vector_23-2147497345.jpg?size=626&ext=jpg"); */
+  
   background-position: center;
   background-size: cover;
-  background-color: skyblue;
+  /* background-color: skyblue; */
   background-repeat: no-repeat;
   color:black;
 }
