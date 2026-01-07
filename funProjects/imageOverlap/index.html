@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Slider</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .slider {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      overflow: hidden;
+    }
+
+    .slider img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50%;
+      height: 100%;
+      object-fit: cover;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .slider img.left {
+      z-index: 1;
+    }
+
+    .slider img.right {
+      z-index: 2;
+    }
+  </style>
+</head>
+<body>
+  <div class="slider relative mx-auto mt-10" id="slider">
+    <img src="https://via.placeholder.com/600x300/FF0000/FFFFFF?text=Left+Image" class="left" id="leftImage" draggable="true">
+    <img src="https://via.placeholder.com/600x300/0000FF/FFFFFF?text=Right+Image" class="right" id="rightImage" draggable="true">
+  </div>
+
+  <script>
+    const leftImage = document.getElementById('leftImage');
+    const rightImage = document.getElementById('rightImage');
+    const slider = document.getElementById('slider');
+
+    let dragStartX = 0;
+    let dragEndX = 0;
+
+    leftImage.addEventListener('dragstart', (e) => {
+      dragStartX = e.clientX;
+    });
+
+    leftImage.addEventListener('dragend', (e) => {
+      dragEndX = e.clientX;
+      handleDrag(leftImage, rightImage);
+    });
+
+    rightImage.addEventListener('dragstart', (e) => {
+      dragStartX = e.clientX;
+    });
+
+    rightImage.addEventListener('dragend', (e) => {
+      dragEndX = e.clientX;
+      handleDrag(rightImage, leftImage);
+    });
+
+    function handleDrag(draggedImage, targetImage) {
+      if (dragStartX > dragEndX) {
+        // Dragging left
+        draggedImage.style.width = '100%';
+        targetImage.style.width = '0';
+      } else {
+        // Dragging right
+        draggedImage.style.width = '0';
+        targetImage.style.width = '100%';
+      }
+    }
+  </script>
+</body>
+</html>

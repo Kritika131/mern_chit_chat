@@ -1,0 +1,4 @@
+PORT = 5005
+MONGO_URI=mongodb+srv://admin:admin123@cluster0.vrejke1.mongodb.net/?retryWrites=true&w=majority
+JWT_SECRET = kritika_@123
+NODE_ENV = production
